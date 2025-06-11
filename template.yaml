@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
   serverless-crammer
@@ -8,7 +8,7 @@ Resources:
   StockTradingStateMachine:
     Type: AWS::Serverless::StateMachine # More info about State Machine Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-statemachine.html
     Properties:
-      DefinitionUri: statemachine/stock_trader.asl.json
+      DefinitionUri: statemachine/definition.asl.json
       DefinitionSubstitutions:
         StockCheckerFunctionArn: !GetAtt StockCheckerFunction.Arn
         StockSellerFunctionArn: !GetAtt StockSellerFunction.Arn
@@ -23,14 +23,14 @@ Resources:
             Enabled: false # This schedule is disabled by default to avoid incurring charges.
             Schedule: rate(1 hour)
       Policies: # Find out more about SAM policy templates: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-policy-templates.html
-      - LambdaInvokePolicy:
-          FunctionName: !Ref StockCheckerFunction
-      - LambdaInvokePolicy:
-          FunctionName: !Ref StockSellerFunction
-      - LambdaInvokePolicy:
-          FunctionName: !Ref StockBuyerFunction
-      - DynamoDBWritePolicy:
-          TableName: !Ref TransactionTable
+        - LambdaInvokePolicy:
+            FunctionName: !Ref StockCheckerFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref StockSellerFunction
+        - LambdaInvokePolicy:
+            FunctionName: !Ref StockBuyerFunction
+        - DynamoDBWritePolicy:
+            TableName: !Ref TransactionTable
 
   StockCheckerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
@@ -39,7 +39,7 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.11
       Architectures:
-      - x86_64
+        - x86_64
 
   StockSellerFunction:
     Type: AWS::Serverless::Function
@@ -48,7 +48,7 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.11
       Architectures:
-      - x86_64
+        - x86_64
 
   StockBuyerFunction:
     Type: AWS::Serverless::Function
@@ -57,7 +57,7 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.11
       Architectures:
-      - x86_64
+        - x86_64
 
   TransactionTable:
     Type: AWS::Serverless::SimpleTable # More info about SimpleTable Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-simpletable.html
@@ -77,7 +77,8 @@ Outputs:
     Description: Stock Trading State machine ARN
     Value: !Ref StockTradingStateMachine
   StockTradingStateMachineRoleArn:
-    Description: IAM Role created for Stock Trading State machine based on the specified
+    Description:
+      IAM Role created for Stock Trading State machine based on the specified
       SAM Policy Templates
     Value: !GetAtt StockTradingStateMachineRole.Arn
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
