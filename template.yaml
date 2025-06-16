@@ -51,12 +51,6 @@ Resources:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
-      LifecycleConfiguration:
-        Rules:
-          - Id: ExpireTempFiles
-            Status: Enabled
-            ExpirationInDays: 7
-            Prefix: temp/
       NotificationConfiguration:
         EventBridgeConfiguration:
           EventBridgeEnabled: true
