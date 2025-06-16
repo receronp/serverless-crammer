@@ -3,7 +3,9 @@ import sys
 from transformers import pipeline
 
 
-def download_and_save_model(model_name: str, save_dir: str = "./pipes"):
+def download_and_save_model(model_name: str, save_dir: str = None):
+    if save_dir is None:
+        save_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pipes")
     os.makedirs(save_dir, exist_ok=True)
     pipe = pipeline(model_name)
     model_path = os.path.join(save_dir, f"{model_name}-model")
